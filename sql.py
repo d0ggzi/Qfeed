@@ -37,41 +37,62 @@ class SQL:
             for topic in result:
                 topic_list.append(topic)
             return topic_list
-
-    def add_channel(self, name: str):
-        """Добавление основного канала"""
+        
+    
+    def delete_topic(self, topic_id: str, chat_id: str):
+        """Удаление топика"""
         with self.conn:
-            # Проверка на наличие записи такого канала
-            self.cursor.execute("SELECT channel FROM config WHERE channel=%s", (name,))
+            # Проверка на наличие записи такого топика
+            self.cursor.execute("SELECT name FROM topics WHERE (topic_id = %s AND chat_id = %s)", (topic_id, str(chat_id),))
             result = self.cursor.fetchall()
             if not bool(len(result)):
-                self.cursor.execute("INSERT INTO config (channel) VALUES (%s)", (name,))
-                return f'Запись {name} добавлена.'
-            return f'Запись {name} существует.'
+                return False
+            else:
+                self.cursor.execute("DELETE FROM topics WHERE (topic_id = %s AND chat_id = %s)", (topic_id, str(chat_id),))
+                return True
 
-    def get_channels(self):
+
+    def add_channel(self, channel_id, name, topic_id, chat_id: str):
+        """Добавление канала"""
         with self.conn:
-            topic_list = []
-            self.cursor.execute("SELECT name FROM channels")
+            # Проверка на наличие записи такого канала
+            self.cursor.execute("SELECT name FROM channels WHERE channel_id=%s", (str(chat_id),))
             result = self.cursor.fetchall()
-            for topic in result:
-                if topic[0] is None:
+            if not bool(len(result)):
+                self.cursor.execute("INSERT INTO channels (channel_id, name, topic_id, chat_id) VALUES \
+                                    (%s, %s, %s, %s)", (channel_id, name, str(topic_id), str(chat_id)))
+                return True
+            return False
+
+    def get_channels(self, chat_id: str = None, topic_id: str = None):
+        with self.conn:
+            channel_list = []
+            if chat_id is not None: 
+                self.cursor.execute("SELECT channel_id, name FROM channels \
+                                    WHERE (topic_id = %s AND chat_id = %s)", (topic_id, str(chat_id),))
+            else:
+                self.cursor.execute("SELECT DISTINCT channel_id FROM channels")
+            result = self.cursor.fetchall()
+            for channel in result:
+                if channel[0] is None:
                     pass
                 else:
-                    topic_list.append(topic[0])
-            return topic_list
+                    channel_list.append(channel)
+            return channel_list
 
-    def delete_channel(self, name: str):
-        """Удаление основного канала"""
-        with self.connection:
+
+    def delete_channel(self, topic_id: str, chat_id: str, channel_id: str):
+        """Удаление канала"""
+        with self.conn:
             # Проверка на наличие записи такого канала
-            self.cursor.execute("SELECT channel FROM config WHERE channel = %s", (name,))
+            self.cursor.execute("SELECT name FROM channels WHERE (topic_id = %s AND chat_id = %s)", (topic_id, str(chat_id),))
             result = self.cursor.fetchall()
             if not bool(len(result)):
-                return f'Запись {name} не найдена.'
+                return False
             else:
-                self.cursor.execute("DELETE FROM config WHERE channel = %s", (name,))
-                return f'Запись {name} удалена.'
+                self.cursor.execute("DELETE FROM channels WHERE (topic_id = %s AND chat_id = %s AND channel_id = %s)", (topic_id, str(chat_id), str(channel_id)))
+                return True
+
 
     def close(self):
         """Закрываем соединение с БД"""
