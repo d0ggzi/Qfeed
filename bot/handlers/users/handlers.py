@@ -3,10 +3,13 @@ import logging
 from aiogram import F, Router, Bot
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+from aiogram.types import ReplyKeyboardMarkup
 from aiogram.filters import Command, CommandStart
 from bot.keyboards.inline.choice_buttons import menu
 from bot.states.sostoy import qfeed_state
 from main import db
+from config import admin_id
+from aiogram.filters import BaseFilter
 
 form_router = Router()
 
@@ -14,7 +17,7 @@ form_router = Router()
 @form_router.message(CommandStart(), F.chat.type.in_({"group", "supergroup"}))
 async def start(message: Message, state: FSMContext):
     await message.answer("Привет, {0}! Добро пожаловать в Qfeed, бота для помощи в организации твоих каналов.\
-    Давай начнем! Выбери, что ты хочешь сделать".format(message.from_user.first_name), reply_markup=menu)
+        Давай начнем! Выбери, что ты хочешь сделать".format(message.from_user.first_name), reply_markup=menu)
     username = message.from_user.username if message.from_user.username is not None else message.from_user.first_name
     db.add_user(message.from_user.id, message.chat.id, username)
     await state.set_state(qfeed_state.main_menu)
@@ -72,6 +75,8 @@ async def settings_ask(message: Message, state: FSMContext):
 #     await state.set_state(sostoy.reply_message)
 
 
-@form_router.message(F.chat.type.not_in({"group", "supergroup"}))
-async def process_unknown_write_bots(message: Message) -> None:
-    await message.reply("Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...")
+# @form_router.message(F.chat.type.not_in({"group", "supergroup"}))
+# async def process_unknown_write_bots(message: Message) -> None:
+#     await message.reply(
+#             "Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это")
+

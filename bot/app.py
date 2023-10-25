@@ -3,7 +3,7 @@
 import logging
 from aiogram import Bot, Dispatcher, enums
 from aiogram.fsm.storage.memory import MemoryStorage
-from bot.handlers import form_router
+from bot.handlers import form_router, admin_router, start_router
 import asyncio
 import config
 import sys
@@ -15,8 +15,7 @@ async def main():
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
     # dp.shutdown.register(on_shutdown)
-    dp.include_router(form_router)
-
+    dp.include_routers(form_router, start_router, admin_router)
     await dp.start_polling(bot)
 
 

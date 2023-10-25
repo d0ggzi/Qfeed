@@ -6,3 +6,4 @@ class qfeed_state(StatesGroup):
     delete_theme = State()
     edit_theme = State()
     settings = State()
+

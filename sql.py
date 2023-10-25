@@ -73,6 +73,37 @@ class SQL:
                 self.cursor.execute("DELETE FROM config WHERE channel = %s", (name,))
                 return f'Запись {name} удалена.'
 
+    def get_all_users(self):
+        with self.conn:
+            users_list = []
+            self.cursor.execute("SELECT chat_id FROM users WHERE user")
+            result = self.cursor.fetchall()
+            for chat in result:
+                if chat[0] is None:
+                    pass
+                else:
+                    users_list.append(chat[0])
+            return users_list
+
     def close(self):
         """Закрываем соединение с БД"""
         self.conn.close()
+
+
+
+
+# conn = psycopg2.connect(f"""
+#     host=rc1b-2wfn2w8hz6rt5hfv.mdb.yandexcloud.net
+#     port=6432
+#     sslmode=verify-full
+#     dbname={config.dbname}
+#     user={config.dbuser}
+#     password={config.dbpassword}
+#     target_session_attrs=read-write
+# """)
+# cursor = conn.cursor()
+#
+# cursor.execute(f"Select chat_id FROM users")
+# for table in cursor.fetchall():
+#     print(table)
+# print('---')

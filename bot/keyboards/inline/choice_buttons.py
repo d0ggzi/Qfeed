@@ -15,3 +15,11 @@ menu = ReplyKeyboardMarkup(
             ],
             resize_keyboard=True,
         )
+
+admin_keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                    KeyboardButton(text='Отправить рекламу'),
+                ]
+            ],
+                resize_keyboard=True)
