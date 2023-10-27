@@ -76,7 +76,7 @@ class SQL:
     def get_all_users(self):
         with self.conn:
             users_list = []
-            self.cursor.execute("SELECT chat_id FROM users WHERE user")
+            self.cursor.execute("SELECT chat_id FROM users")
             result = self.cursor.fetchall()
             for chat in result:
                 if chat[0] is None:

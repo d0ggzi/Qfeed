@@ -55,13 +55,13 @@ async def delete_theme_ask(message: Message, state: FSMContext):
     await state.set_state(qfeed_state.delete_theme)
 
 
-@form_router.message(qfeed_state.main_menu, F.text == "Настройки")
-async def settings_ask(message: Message, state: FSMContext):
-    #TODO изменение языка, обратная связь
-    await message.answer("Что Вы хотите сделать?")
-    await state.set_state(qfeed_state.settings)
+# @form_router.message(qfeed_state.main_menu, F.text == "Настройки")
+# async def settings_ask(message: Message, state: FSMContext):
+#     #TODO изменение языка, обратная связь
+#     await message.answer("Что Вы хотите сделать?")
+#     await state.set_state(qfeed_state.settings)
 
-  
+
 # @form_router.message(sostoy.reply_message)
 # async def category(message: Message, state: FSMContext):
 #     print(message.text)
