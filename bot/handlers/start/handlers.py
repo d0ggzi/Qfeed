@@ -2,7 +2,7 @@ import logging
 from aiogram import F, Router, Bot
 from aiogram.filters import CommandStart, Command
 from config import admin_id
-from bot.keyboards.inline.choice_buttons import admin_keyboard
+from bot.keyboards.reply.choice_buttons import admin_keyboard
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import BaseFilter
 from bot.filters.admin import IsAdmin
