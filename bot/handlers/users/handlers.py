@@ -7,6 +7,23 @@ from aiogram.filters import Command, CommandStart
 from bot.keyboards.reply.choice_buttons import menu, edit_theme_keyboard, go_to_main_menu
 from bot.states.sostoy import qfeed_state
 from main import db
+from aiokafka import AIOKafkaConsumer
+import asyncio
+
+async def get_messages_from_kafka():
+    consumer = AIOKafkaConsumer(
+        'qfeed',
+        bootstrap_servers='localhost:9092'
+    )
+    await consumer.start()
+    try:
+        async for msg in consumer:
+            print("consumed: ", msg.topic, msg.partition, msg.offset,
+                  msg.key, msg.value, msg.timestamp)
+    finally:
+        # Will leave consumer group; perform autocommit if enabled.
+        await consumer.stop()
+
 
 form_router = Router()
 
@@ -41,7 +58,6 @@ async def add_topic(message: Message, bot: Bot, state: FSMContext):
     await message.answer(f"Ваша тема {message.text} создана", reply_markup=menu)
     db.add_topic(forum_topic.message_thread_id, forum_topic.name, message.chat.id)
     await state.set_state(qfeed_state.main_menu)
-
 
 @form_router.message(qfeed_state.main_menu, F.text == "Удалить тему")
 async def delete_topic_ask(message: Message, state: FSMContext):

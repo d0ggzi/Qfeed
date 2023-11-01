@@ -1,3 +1,3 @@
-from .handlers import form_router
+from .handlers import form_router, get_messages_from_kafka
 
-__all__ = ["form_router"]
+__all__ = ["form_router", "get_messages_from_kafka"]

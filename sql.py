@@ -77,7 +77,7 @@ class SQL:
                 if channel[0] is None:
                     pass
                 else:
-                    channel_list.append(channel)
+                    channel_list.append(int(channel[0]))
             return channel_list
 
 

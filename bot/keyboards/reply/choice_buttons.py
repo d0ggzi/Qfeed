@@ -22,7 +22,7 @@ menu = ReplyKeyboardMarkup(
 edit_theme_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Добавить канал', request_chat=KeyboardButtonRequestChat(request_id=1, chat_is_channel=True)),
+            KeyboardButton(text='Добавить канал'), #, request_chat=KeyboardButtonRequestChat(request_id=1, chat_is_channel=True)
             KeyboardButton(text='Удалить канал')
         ],
         [
