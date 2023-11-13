@@ -1,25 +1,11 @@
 from aiogram import F, Router, Bot
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, ReplyKeyboardRemove
+from aiogram.types import Message, InlineKeyboardMarkup, \
+    InlineKeyboardButton, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from aiogram.filters import Command, CommandStart
+from aiogram.filters import Command, CommandStart, CommandObject
 from bot.keyboards.reply.choice_buttons import menu, edit_theme_keyboard, go_to_main_menu
 from bot.states.sostoy import qfeed_state
 from main import db
-from aiokafka import AIOKafkaConsumer
-
-async def get_messages_from_kafka():
-    consumer = AIOKafkaConsumer(
-        'qfeed',
-        bootstrap_servers='localhost:9092'
-    )
-    await consumer.start()
-    try:
-        async for msg in consumer:
-            print("consumed: ", msg.topic, msg.partition, msg.offset,
-                  msg.key, msg.value, msg.timestamp)
-    finally:
-        # Will leave consumer group; perform autocommit if enabled.
-        await consumer.stop()
 
 form_router = Router()
 
@@ -33,7 +19,8 @@ async def start(message: Message, state: FSMContext):
         db.add_user(message.from_user.id, message.chat.id, username)
         await state.set_state(qfeed_state.main_menu)
     else:
-        await message.answer('Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...')
+        await message.answer(
+            'Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...')
 
 
 @form_router.message(F.text == 'Вернуться в меню')
@@ -55,9 +42,10 @@ async def add_topic(message: Message, bot: Bot, state: FSMContext):
     db.add_topic(forum_topic.message_thread_id, forum_topic.name, message.chat.id)
     await state.set_state(qfeed_state.main_menu)
 
+
 @form_router.message(qfeed_state.main_menu, F.text == "Удалить тему")
 async def delete_topic_ask(message: Message, state: FSMContext):
-    #TODO у вас нет тем, темы выбираются кнопкой
+    # TODO у вас нет тем, темы выбираются кнопкой
     user_topics = db.get_topics(message.chat.id)
     if len(user_topics) == 0:
         await message.answer('У Вас нет тем, для начала добавьте их', reply_markup=menu)
@@ -84,7 +72,7 @@ async def delete_topic(call: CallbackQuery, state: FSMContext, bot: Bot):
 
 @form_router.message(qfeed_state.main_menu, F.text == "Редактировать тему")
 async def edit_topic_ask(message: Message, state: FSMContext):
-    #TODO у вас нет тем, темы выбираются кнопкой
+    # TODO у вас нет тем, темы выбираются кнопкой
     user_topics = db.get_topics(message.chat.id)
     if len(user_topics) == 0:
         await message.answer('У Вас нет тем, для начала добавьте их', reply_markup=menu)
@@ -104,7 +92,7 @@ async def edit_topic(call: CallbackQuery, state: FSMContext):
     await call.message.answer("Что вы хотите сделать?", reply_markup=edit_theme_keyboard)
     await call.answer()
     await state.set_state(qfeed_state.edit_topic_choice)
-    
+
 
 @form_router.message(qfeed_state.edit_topic_choice, F.text == "Добавить канал")
 async def add_channel_ask(message: Message, state: FSMContext):
@@ -115,7 +103,7 @@ async def add_channel_ask(message: Message, state: FSMContext):
 @form_router.message(qfeed_state.edit_topic_choice, F.text == "Удалить канал")
 async def delete_channel_ask(message: Message, state: FSMContext):
     call = (await state.get_data())['call']
-    user_channels = db.get_channels(message.chat.id, call.data)
+    user_channels = db.get_channels(message.chat.id, call.data, with_name=True)
     if len(user_channels) == 0:
         await message.answer('В выбранной теме нет каналов, для начала добавьте их', reply_markup=menu)
         await state.set_state(qfeed_state.main_menu)
@@ -155,10 +143,18 @@ async def delete_channel(call: CallbackQuery, bot: Bot, state: FSMContext):
 
 @form_router.message(qfeed_state.main_menu, F.text == "Настройки")
 async def settings_ask(message: Message, state: FSMContext):
-    #TODO изменение языка, обратная связь
+    # TODO изменение языка, обратная связь
     await message.answer("Что Вы хотите сделать?", reply_markup=go_to_main_menu)
     await state.set_state(qfeed_state.settings)
 
+
+@form_router.message(Command("summarize"))
+async def summarize_cmd(message: Message, command: CommandObject):
+    if message.message_thread_id is None:
+        await message.answer("Вы можете использовать команду /summarize только в топиках.")
+    else:
+        if command.args is not None:
+            print(command.args)
 
 # @form_router.message(sostoy.reply_message)
 # async def category(message: Message, state: FSMContext):
@@ -175,7 +171,8 @@ async def settings_ask(message: Message, state: FSMContext):
 
 @form_router.message(F.chat.type.not_in({"group", "supergroup"}))
 async def process_unknown_write_bots(message: Message) -> None:
-    await message.reply("Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...")
+    await message.reply(
+        "Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...")
 
 
 @form_router.message()

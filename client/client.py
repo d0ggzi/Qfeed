@@ -1,21 +1,16 @@
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from datetime import datetime
-import os
-import sys
-base_dir = os.path.abspath(os.path.join(os.path.dirname('main.py'), '..'))
-sys.path.append(base_dir)
-from sql import SQL
+from parser import db
 import config
 
-app = Client('bot_python', config.API_ID, config.API_HASH)
-db = SQL()
 
-print(db.get_channels())
+app = Client('bot_python', config.API_ID, config.API_HASH)
+
 
 @app.on_message(filters.chat(db.get_channels()))
-async def get_post(client, message):
-
-    print(message)
+async def get_post(client, message: Message):
+    await message.forward(config.bot_id)
 
     # if not db.message_id_exists(username, message_id):
     #     db.add_message_id(username, message_id)
@@ -37,8 +32,3 @@ async def get_post(client, message):
 
 #     send = app.get_messages(username, msg_id)
 #     send.forward(db.get_channel(), as_copy=True)
-
-
-if __name__ == '__main__':
-    print(datetime.today().strftime(f'%H:%M:%S | Bot Telegram-Grabber launched.'))
-    app.run()

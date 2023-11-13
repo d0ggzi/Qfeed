@@ -56,7 +56,7 @@ class SQL:
         """Добавление канала"""
         with self.conn:
             # Проверка на наличие записи такого канала
-            self.cursor.execute("SELECT name FROM channels WHERE channel_id=%s", (str(chat_id),))
+            self.cursor.execute("SELECT name FROM channels WHERE channel_id=%s", (str(chat_id),))  # что оно означает...
             result = self.cursor.fetchall()
             if not bool(len(result)):
                 self.cursor.execute("INSERT INTO channels (channel_id, name, topic_id, chat_id) VALUES \
@@ -64,7 +64,7 @@ class SQL:
                 return True
             return False
 
-    def get_channels(self, chat_id: str = None, topic_id: str = None):
+    def get_channels(self, chat_id: str = None, topic_id: str = None, with_name: bool = False):
         with self.conn:
             channel_list = []
             if chat_id is not None: 
@@ -73,11 +73,9 @@ class SQL:
             else:
                 self.cursor.execute("SELECT DISTINCT channel_id FROM channels")
             result = self.cursor.fetchall()
+            if with_name: return result
             for channel in result:
-                if channel[0] is None:
-                    pass
-                else:
-                    channel_list.append(int(channel[0]))
+                channel_list.append(int(channel[0]))
             return channel_list
 
 
@@ -92,6 +90,14 @@ class SQL:
             else:
                 self.cursor.execute("DELETE FROM channels WHERE (topic_id = %s AND chat_id = %s AND channel_id = %s)", (topic_id, str(chat_id), str(channel_id)))
                 return True
+
+
+    def get_info_subscribed_on_channel(self, channel_id: int):
+        with self.conn:
+            # info = []
+            self.cursor.execute("SELECT name, topic_id, chat_id FROM channels WHERE channel_id=%s", (str(channel_id),))
+            result = self.cursor.fetchall()
+            return result
 
 
     def get_all_users(self):
