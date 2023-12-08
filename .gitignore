@@ -3,3 +3,8 @@ __pycache__
 venv
 .idea
 *.session
+*.session-journal
+client_test.py
+test-db.py
+.env
+test.py

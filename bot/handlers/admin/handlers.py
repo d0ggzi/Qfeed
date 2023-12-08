@@ -2,7 +2,6 @@ import logging
 
 from aiogram import Router, F, Bot
 from aiogram.filters import BaseFilter
-import config
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command, CommandStart

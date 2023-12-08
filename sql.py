@@ -1,16 +1,15 @@
 import psycopg2
-import config
+from config import settings
+
 
 class SQL:
     def __init__(self) -> None:
         self.conn = psycopg2.connect(f"""
-            host=rc1b-2wfn2w8hz6rt5hfv.mdb.yandexcloud.net
-            port=6432
-            sslmode=verify-full
-            dbname={config.dbname}
-            user={config.dbuser}
-            password={config.dbpassword}
-            target_session_attrs=read-write
+            host={settings.POSTGRES_HOST}
+            port={settings.POSTGRES_PORT}
+            dbname={settings.POSTGRES_DB}
+            user={settings.POSTGRES_USER}
+            password={settings.POSTGRES_PASSWORD}
         """)
         self.cursor = self.conn.cursor()
 
@@ -115,22 +114,3 @@ class SQL:
     def close(self):
         """Закрываем соединение с БД"""
         self.conn.close()
-
-
-
-
-# conn = psycopg2.connect(f"""
-#     host=rc1b-2wfn2w8hz6rt5hfv.mdb.yandexcloud.net
-#     port=6432
-#     sslmode=verify-full
-#     dbname={config.dbname}
-#     user={config.dbuser}
-#     password={config.dbpassword}
-#     target_session_attrs=read-write
-# """)
-# cursor = conn.cursor()
-#
-# cursor.execute(f"Select chat_id FROM users")
-# for table in cursor.fetchall():
-#     print(table)
-# print('---')

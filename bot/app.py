@@ -5,11 +5,11 @@ from aiogram import Bot, Dispatcher, enums
 from aiogram.fsm.storage.memory import MemoryStorage
 from bot.handlers import form_router, admin_router, start_router
 import asyncio
-import config
+from config import settings
 import sys
 
 async def main():
-    bot = Bot(token=config.BOT_TOKEN, parse_mode=enums.ParseMode.HTML)
+    bot = Bot(token=settings.BOT_TOKEN, parse_mode=enums.ParseMode.HTML)
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
     dp.include_routers(admin_router, form_router, start_router)
