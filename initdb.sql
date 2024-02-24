@@ -13,6 +13,7 @@ CREATE TABLE topics(
    CONSTRAINT fk_chat_id
       FOREIGN KEY(chat_id)
       REFERENCES users(chat_id)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE channels(
@@ -24,6 +25,7 @@ CREATE TABLE channels(
    CONSTRAINT fk_topic
       FOREIGN KEY(topic_id, chat_id)
       REFERENCES topics(topic_id, chat_id)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE subscribed(
@@ -32,4 +34,5 @@ CREATE TABLE subscribed(
     CONSTRAINT user_id
       FOREIGN KEY(user_id)
       REFERENCES users(user_id)
+      ON DELETE CASCADE
 );

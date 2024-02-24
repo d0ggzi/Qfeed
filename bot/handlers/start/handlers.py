@@ -21,5 +21,5 @@ async def if_admin_start(message: Message, state: FSMContext):
 @start_router.message(F.chat.type.not_in({"group", "supergroup"}), Command(commands=["start"]))
 async def if_not_admin_start(message: Message, state: FSMContext):
     await message.answer(
-            "Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...")
+            "Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: https://telegra.ph/Dobavlyaem-bota-v-administratory-gruppy-10-12")
     await state.set_state(qfeed_state.main_menu)

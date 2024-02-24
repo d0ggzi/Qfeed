@@ -5,8 +5,8 @@ from config import settings
 class SQL:
     def __init__(self) -> None:
         self.conn = psycopg2.connect(f"""
-            host={settings.POSTGRES_HOST}
-            port={settings.POSTGRES_PORT}
+            host={settings.POSTGRES_OUT_HOST}
+            port={settings.POSTGRES_OUT_PORT}
             dbname={settings.POSTGRES_DB}
             user={settings.POSTGRES_USER}
             password={settings.POSTGRES_PASSWORD}

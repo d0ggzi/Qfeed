@@ -11,13 +11,13 @@ frozenlist==1.4.0
 idna==3.4
 magic-filter==1.0.12
 multidict==6.0.4
-pip==21.1.1
 psycopg2-binary==2.9.9
 pyaes==1.6.1
 pydantic==2.3.0
 pydantic-core==2.6.3
+pydantic-settings==2.2.1
 Pyrogram==2.0.106
 PySocks==1.7.1
-setuptools==56.0.0
+python-dotenv==1.0.1
 typing-extensions==4.7.1
 yarl==1.9.2

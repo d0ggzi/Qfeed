@@ -14,13 +14,14 @@ form_router = Router()
 async def start(message: Message, state: FSMContext):
     if message.chat.is_forum:
         await message.answer("Привет, {0}! Добро пожаловать в Qfeed, бота для помощи в организации твоих каналов.\
-        Давай начнем! Выбери, что ты хочешь сделать".format(message.from_user.first_name), reply_markup=menu)
+        \n\nДавай начнем! Выбери, что ты хочешь сделать".format(message.from_user.first_name), reply_markup=menu)
         username = message.from_user.username if message.from_user.username is not None else message.from_user.first_name
         db.add_user(message.from_user.id, message.chat.id, username)
         await state.set_state(qfeed_state.main_menu)
     else:
         await message.answer(
-            'Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...')
+            'Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: '
+            'https://telegra.ph/Dobavlyaem-bota-v-administratory-gruppy-10-12')
 
 
 @form_router.message(F.text == 'Вернуться в меню')
@@ -172,7 +173,8 @@ async def summarize_cmd(message: Message, command: CommandObject):
 @form_router.message(F.chat.type.not_in({"group", "supergroup"}))
 async def process_unknown_write_bots(message: Message) -> None:
     await message.reply(
-        "Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: ...")
+        "Для начала работы создай форум, добавь меня в него и сделай администратором. Инструкция, как это сделать: "
+        "https://telegra.ph/Dobavlyaem-bota-v-administratory-gruppy-10-12")
 
 
 @form_router.message()
