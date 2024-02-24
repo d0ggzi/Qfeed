@@ -25,11 +25,11 @@
 
 Она создалась автоматически. Ура! Подпишем созданную нами тему на какие-нибудь новостные каналы. Для этого нажмем "Редактировать тему" и выберем нужную    
 
-<img src="https://github.com/d0ggzi/Qfeed/assets/43131496/354353a2-f343-4884-9195-53afcbb612fd" alt="2" width="425"/>  <img src="https://github.com/d0ggzi/Qfeed/assets/43131496/b999edc9-82e2-4b2c-aa65-af2496e738f3" alt="3" width="415"/>
+<img src="https://github.com/d0ggzi/Qfeed/assets/43131496/354353a2-f343-4884-9195-53afcbb612fd" alt="2" width="315"/>  <img src="https://github.com/d0ggzi/Qfeed/assets/43131496/b999edc9-82e2-4b2c-aa65-af2496e738f3" alt="3" width="300"/>
 
 Cool! Теперь удалим каналы, аналогично нажимаем на "Редактировать тему"    
 
-<img src="https://github.com/d0ggzi/Qfeed/assets/43131496/8e8fa14a-d071-4124-9983-cc09ca0e78a5" alt="2" width="425"/>  <img src="https://github.com/d0ggzi/Qfeed/assets/43131496/010f15a6-5d40-4dde-9f7d-a59864e78e22" alt="3" width="425"/>
+<img src="https://github.com/d0ggzi/Qfeed/assets/43131496/8e8fa14a-d071-4124-9983-cc09ca0e78a5" alt="2" width="315"/>  <img src="https://github.com/d0ggzi/Qfeed/assets/43131496/010f15a6-5d40-4dde-9f7d-a59864e78e22" alt="3" width="315"/>
 
 И наконец, удалим тему     
 
